@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<div class="container my-5">
+    <h2>Detailed Project Report</h2>
+    <table class="table">
+        <tbody>
+            <tr>DETAILS OF GRANTEE</tr>
+            <tr><th scope="row">Name of the applicant organization</th><td>{{p.name}}</td></tr>
+            <tr><th scope="row">Email</th><td>{{p.email}}</td></tr>
+            <tr><th scope="row">Phone Number</th><td>{{p.phone}}</td></tr>
+            <tr><th scope="row">Address</th><td>{{p.add1}}</td></tr>
+            <tr><th></th><td>{{p.add2}}</td></tr>
+            <tr><th scope="row">State</th><td>{{p.state}}</td></tr>
+            <tr><th scope="row">Pincode</th><td>{{p.pincode}}</td></tr>
+            <tr>DETAILS OF PROJECT</tr>
+            <tr><th scope="row">Name of the project</th><td>{{q.name}}</td></tr>
+            <tr><th scope="row">Project Id</th><td>{{q.id}}</td></tr>
+            <tr><th scope="row">Address of the Location</th><td>{{q.add1}}</td></tr>
+            <tr><th></th><td>{{q.add2}}</td></tr>
+            <tr><th scope="row">Nearest Mode of Transportation</th><td>{{q.mot}}</td></tr>
+            <tr><th scope="row">Name of the nearest mode of transport</th><td>{{q.mot_name}}</td></tr>
+            <tr><th scope="row">Address of the selected transport</th><td>{{q.mot_add1}}</td></tr>
+            <tr><th></th><td>{{q.mot_add2}}</td></tr>
+            <tr><th scope="row">Distance between the location and the selected mode of transport</th><td>{{q.distance}}</td></tr>
+            {% if q.distance > 50  %}
+            {% set _ = q.__setattr__('m1', '0.5') %}
+            {% elif q.distance > 20  %}
+            {% set _ = q.__setattr__('m1', '1') %}
+            {% elif q.distance > 10  %}
+            {% set _ = q.__setattr__('m1', '2') %}
+            {% else %}
+            {% set _ = q.__setattr__('m1', '3') %}
+            {% endif %}
+            <tr><th scope="row">Area of the Land(in sq ft)</th><td>{{q.area}}</td></tr>
+            <tr><th scope="row">Classification of Project</th><td>{{q.cop}}</td></tr>
+            {% if q.type == "Others" %}
+            <tr><th scope="row">Type of Land</th><td>{{q.type}}</td></tr>
+            {% else %}
+            <tr><th scope="row">Type of Land</th><td>{{q.other_type}}</td></tr>
+            {% endif %}
+            {% if q.type == "Others" %}
+                {% if q.other_type|lower == "forest land" || q.other_type|lower == "swampy land" || q.other_type|lower == "low lying land" %}
+                    {% set _ = q.__setattr__('m2', '0') %}
+                {% else %}
+                    {% set _ = q.__setattr__('m2', '1.5') %}
+                {% endif %}
+            {% else %}
+                {% set _ = q.__setattr__('m2', '3') %}
+            {% endif %}
+            <tr><th scope="row">Land Ownership</th><td>{{q.ownership}}</td></tr>
+            <tr><th scope="row">Is the land readily available for executing the project?</th><td>{{q.availability}}</td></tr>
+            {% if q.availability == "yes" %}
+                {% set _ = q.__setattr__('m4', '2') %}
+            {% else %}
+                {% set _ = q.__setattr__('m4', '0') %}
+            {% endif %}
+            <tr><th scope="row">Utilities Provided</th><td>{{q.utilities}}</td></tr>
+            {% if q.utilities|length > 2 %}
+                {% set _ = q.__setattr__('m5', '1') %}
+            {% else %}
+                {% set _ = q.__setattr__('m5', '0') %}
+            {% endif %}
+            {% if q.category == "Others" %}
+            <tr><th scope="row">Category of the infrastructure</th><td>{{q.category}}</td></tr>
+            {% else %}
+            <tr><th scope="row">Category of the infrastructure</th><td>{{q.other_cat}}</td></tr>
+            {% endif %}
+            <tr><th scope="row">Ancillary Facilities</th><td>{{q.ancillary}}</td></tr>
+            {% set list = ancillary.split(',') %}
+            {% if list|length > 2 %}
+                {% set _ = q.__setattr__('m6', '1') %}
+            {% else %}
+                {% set _ = q.__setattr__('m6', '0') %}
+            {% endif %}
+            <tr><th scope="row">Estimated cost of the Project</th><td>{{q.cost}}</td></tr>
+            <tr><th scope="row">Centre's Share</th><td>{{q.share}}</td></tr>
+            {% if q.cost == q.share %}
+            {% set _ = q.__setattr__('m8', '2') %}
+            {% else %}
+            {% set _ = q.__setattr__('m8', '0') %}
+            {% endif %}
+            <tr>PROJECT DEVELOPMENT</tr>
+            <tr><th scope="row">Does the project enforce any innovative and creative methods for reducing cost and implementation period?</th><td>{{r.inc}}</td></tr>
+            {% if r.inc == "yes" %}
+            {% set _ = r.__setattr__('m3', '5') %}
+            {% else %}
+            {% set _ = r.__setattr__('m3', '0') %}
+            {% endif %}
+            <tr><th scope="row">Available Sports Infrastructure</th><td>{{r.asi}}</td></tr>
+            {% set list = asi.split(',') %}
+            {% if list|length > 3 %}
+            {% set _ = r.__setattr__('m7', '2') %}
+            {% elif list|length > 1 %}
+            {% set _ = r.__setattr__('m7', '1') %}
+            {% endif %}
+            <tr><th scope="row">Number of centres for training of National level Players</th><td>{{r.noc}}</td></tr>
+            <tr><th scope="row">Number of National and International level players from the State in disciplines included in the Asian Games/Common Wealth Games/Olympics</th><td>{{r.nop}}</td></tr>
+            <tr><th scope="row">User Base</th><td>{{r.ub}}</td></tr>
+            <tr>STRATEGIC JUSTIFICATIONS AND MEASURABLE OUTCOMES</tr>
+            <tr><th scope="row">Has the area in which the project is proposed experienced any natural disasters?</th><td>{{s.nd}}</td></tr>
+            {% if s.nd == "yes" %}
+            {% set _ = s.__setattr__('m1', '1') %}
+            {% else %}
+            {% set _ = s.__setattr__('m1', '0') %}
+            {% endif %}
+            <tr><th scope="row">Has the area in which the project is proposed experienced strong demand for proposed sports facilities due to popularity of the sports discipline?</th><td>{{s.demand}}</td></tr>
+            {% if s.demand == "yes" %}
+            {% set _ = s.__setattr__('m2', '1') %}
+            {% else %}
+            {% set _ = s.__setattr__('m2', '0') %}
+            {% endif %}
+            <tr><th scope="row">Has the area in which the project is proposed experienced strpng population growth or significant change in circumstances?</th><td>{{s.pg}}</td></tr>
+            {% if s.pg == "yes" %}
+            {% set _ = s.__setattr__('m3', '1') %}
+            {% else %}
+            {% set _ = s.__setattr__('m3', '0') %}
+            {% endif %}
+            <tr><th scope="row">Has any additional programming opputunities has been identified and planned to increase or maintain participation?</th><td>{{s.apo}}</td></tr>
+            {% if s.apo == "yes" %}
+            {% set _ = s.__setattr__('m4', '5') %}
+            {% else %}
+            {% set _ = s.__setattr__('m4', '0') %}
+            {% endif %}
+            <tr><th scope="row">Has the organization implemented previous projects funded by the Government of India, Department of Sports?</th><td>{{t.prev}}</td></tr>
+            <tr><th scope="row">Does the organization have overdue projects funded by the Government of India, Department of Sports?</th><td>{{t.od}}</td></tr>
+            <tr><th scope="row">Does the organization have successfully completed projects funded by the Government of India, Department of Sports?</th><td>{{t.comp}}</td></tr>
+            <tr><th scope="row">Date and Time of Project Submission</th><td>{{t.sub_time}}</td></tr>
+            <tr><th scope="row">Actions</th>
+            <td><a href="/update/{{p.no}}" type="button" class="btn btn-secondary btn-sm mx-1">Edit</button>
+            <a href="/delete/{{p.no}}" type="button" class="btn btn-danger btn-sm mx-1">Delete</button>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <table class="table">
+        <tbody>
+            {% set _ = q.__setattr__('tot', m1+m2+m3+m4+m5+m6+m7+m8+m9) %}
+            {% set _ = r.__setattr__('tot', m1+m2+m3+m4+m5+m6+m7+m8+m9+m10) %}
+            {% set _ = s.__setattr__('tot', m1+m2+m3+m4+m5+m6+m7+m8) %}
+            <th>Score</th>
+            <tr>I Total: {{q.tot}}</tr>
+            <tr>II Total: {{r.tot}}</tr>
+            <tr>III Total: {{s.tot}}</tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+    crossorigin="anonymous"></script>
+
+{% endbody %}
